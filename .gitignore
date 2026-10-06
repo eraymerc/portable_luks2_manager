@@ -1,0 +1,5 @@
+/luks-web
+/luks-web.exe
+/build/
+*.img
+*.syso

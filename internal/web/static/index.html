@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>luks_web</title>
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<header>
+  <div class="brand">🔒 luks_web</div>
+  <div id="fsinfo" class="fsinfo"></div>
+  <div class="spacer"></div>
+  <button id="btn-lock" class="hidden" title="Diski kapat (değişiklikler yazılır)">Kilitle</button>
+  <button id="btn-quit" class="danger" title="Diski kapat ve programdan çık">Çık</button>
+</header>
+
+<main>
+  <!-- Kilit açma -->
+  <section id="view-unlock" class="card narrow hidden">
+    <h2>Şifreli diski aç</h2>
+    <label>Disk / bölüm
+      <div class="row">
+        <select id="dev-select"></select>
+        <button id="btn-rescan" type="button" title="Diskleri yeniden tara">↻</button>
+      </div>
+    </label>
+    <div id="dev-errors" class="muted small"></div>
+    <form id="unlock-form">
+      <label>Parola
+        <input id="password" type="password" autocomplete="current-password" required>
+      </label>
+      <label class="check"><input id="readonly" type="checkbox"> Salt-okunur aç</label>
+      <button id="btn-unlock" type="submit" class="primary">Aç</button>
+      <div id="unlock-status" class="muted small"></div>
+    </form>
+  </section>
+
+  <!-- Dosya tarayıcı -->
+  <section id="view-browse" class="hidden">
+    <div id="ro-banner" class="banner hidden"></div>
+    <div class="toolbar">
+      <nav id="crumbs" class="crumbs"></nav>
+      <div class="spacer"></div>
+      <span class="rw-only">
+        <button id="btn-mkdir">Yeni klasör</button>
+        <button id="btn-upload">Dosya yükle</button>
+        <button id="btn-upload-dir">Klasör yükle</button>
+        <button id="btn-delete-sel" class="danger" disabled>Seçilenleri sil</button>
+      </span>
+      <button id="btn-zip" title="Bu klasörü zip olarak indir">Zip indir</button>
+      <input id="file-input" type="file" multiple hidden>
+      <input id="dir-input" type="file" webkitdirectory multiple hidden>
+    </div>
+    <div id="drop" class="drop">
+      <table class="files">
+        <thead><tr>
+          <th class="sel"><input type="checkbox" id="sel-all" class="rw-only"></th>
+          <th data-sort="name">Ad</th>
+          <th data-sort="size" class="num">Boyut</th>
+          <th data-sort="mtime">Değiştirilme</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="muted center hidden">Bu klasör boş.</div>
+      <div class="drop-hint rw-only">Yüklemek için dosyaları buraya sürükleyin</div>
+    </div>
+  </section>
+
+  <section id="view-bye" class="card narrow hidden">
+    <h2>Kapatıldı</h2>
+    <p>Disk güvenle kapatıldı ve program sonlandı. Bu sekmeyi kapatabilirsiniz.</p>
+  </section>
+</main>
+
+<!-- Yükleme kuyruğu -->
+<aside id="uploads" class="uploads hidden">
+  <div class="uploads-head">
+    <strong id="up-title">Yüklemeler</strong>
+    <div class="spacer"></div>
+    <button id="up-cancel" class="small">İptal</button>
+    <button id="up-close" class="small">✕</button>
+  </div>
+  <ul id="up-list"></ul>
+</aside>
+
+<div id="toast" class="toast hidden"></div>
+</body>
+</html>
